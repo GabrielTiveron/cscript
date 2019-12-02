@@ -1,0 +1,10 @@
+// Fatorial
+void fat(int n){
+  if(n <= 1){
+    1
+  }
+  else{
+    n * fat(n - 1)
+  }
+}
+printf(fat(5))

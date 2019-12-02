@@ -1,0 +1,13 @@
+// Define o fatorial
+fat(n){
+  if(n <= 1){
+    1
+  }
+  else{
+    n * fat(n -1)
+  }
+}
+
+// Imprime fatorial de 5
+
+printf(fat(5))
