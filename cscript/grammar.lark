@@ -1,10 +1,51 @@
-?start : 
+?start : expr+
+
+?expr : value
+
+?value  : number
+        | symbol
+        | lists
+        | var
+        | func
+        | call
+        | mod
+        | div
+        | if
+        | opr
+        | print
+        | ("return" value)?
+
+number  : INT
+        | FLOAT
+
+lists   : "[" value "]"
+
+mod : value "%" value
+
+div : value "/" value
+
+var : symbol "=" value
+
+comp : value "==" value
+
+opr: "(" value* ")"
+    | "(" opr ")"
+
+print: "printf" "(" value ")"
+
+symbol: SYMBOL
+
+func  : "func" symbol "(" value ")" "{" value* "}"
+
+call : symbol "(" value ")"
+
+if    : "if" "(" comp ")" "{" expr "}" ("else if" "(" comp ")" "{" expr "}")* ("else" "{" expr "}")*
 
 // Terminais
-SYMBOL.0  : /[-!+\/*@$%^&~<>?|\\\w=]+/
-STRING.4    : /"[^"\\]*(\\[^\n\t\r\f][^"\\]*)*"/
-INT.1     : /-?\d+/
-FLOAT.2   : /-?\d+\.\d+/
+SYMBOL  : /[-!+\/*@$%^&~<>?|\\\w=]+/
+STRING  : /"[^"\\]*(\\[^\n\t\r\f][^"\\]*)*"/
+INT     : /-?\d+/
+FLOAT   : /-?\d+\.\d+/
 
 %ignore /\s+/
-%ignore /;/
+%ignore /\n/

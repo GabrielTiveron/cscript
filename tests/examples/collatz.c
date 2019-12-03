@@ -2,13 +2,13 @@
 // Argumento deve ser um número inteiro
 func collatz(n){
   if(n == 1){
-    [1];
+    return [1]
   }
   else if(n % 2 == 0){
-    n = collatz(n / 2);
+    return collatz(n / 2)
   }
   else{
-    n = collatz((3 * n) + 1);
+    return collatz((3 * n) + 1)
   }
 
 }

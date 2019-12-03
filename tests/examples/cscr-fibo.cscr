@@ -1,18 +1,18 @@
 // Série de Fibonacci
-fibo(n){
-  fibo-tco(n, 0, 1, [])
+func fibo(n){
+  return fibo-tco(n, 0, 1, [])
 }
 
 // Implementação com eliminação de recursão de cauda
-fibo-tco(n, x, y, lst){
+func fibo-tco(n, x, y, lst){
   if(n == 0){
-    lst
+    return lst
   }
   else{
     x_ = y;
     y_ = x + y;
     lst_ = lst append(list x_);
-    fibo-tco(n-1, x_, y_, lst_)
+    return fibo-tco(n-1, x_, y_, lst_)
   }
 }
 

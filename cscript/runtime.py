@@ -192,7 +192,7 @@ def _make_global_env():
         'null?':   lambda x: x == [],
         'number?': lambda x: isinstance(x, (float, int)),
 		'odd?':   lambda x: x % 2 == 1,
-        'print':   print,
+        'printf':   print,
         'procedure?': callable,
         'quotient': op.floordiv,
         'round':   round,
