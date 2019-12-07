@@ -1,20 +1,15 @@
 // Série de Fibonacci
-func fibo(n){
-  return fibo-tco(n, 0, 1, [])
-}
-
-// Implementação com eliminação de recursão de cauda
-func fibo-tco(n, x, y, lst){
-  if(n == 0){
-    return lst
+func fibonacci(num)
+{
+  if(num <= 2)
+  {
+    return 1
   }
-  else{
-    x_ = y;
-    y_ = x + y;
-    lst_ = lst append(list x_);
-    return fibo-tco(n-1, x_, y_, lst_)
+  else
+  {
+    return fibonacci(num-1) + fibonacci(num-2)
   }
 }
 
 // Imprime o resultado
-printf(fibo(10)
+printf(fibonacci(10))
