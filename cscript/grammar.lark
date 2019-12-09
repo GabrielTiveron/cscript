@@ -1,51 +1,33 @@
-?start : expr+
+?start : (expr ";"?)+
 
-?expr : value
 
-?value  : number
-        | symbol
-        | lists
-        | var
-        | func
-        | call
-        | mod
-        | div
-        | if
-        | opr
-        | print
-        | ("return" value)?
+?expr : assign
+      | binop
+      | "(" expr ")"
+      | value
 
-number  : INT
-        | FLOAT
+?binop : expr "+" expr -> sum
+       | expr "-" expr -> sub
+       | expr "*" expr -> mul
+       | expr "/" expr -> div
+       | expr "^" expr -> pow
 
-lists   : "[" value "]"
+?assign : value "=" expr+
 
-mod : value "%" value
+?value : SYMBOL -> symbol
+       | STRING
+       | INT -> number
+       | FLOAT -> number
+       | BOOLEAN -> bool
 
-div : value "/" value
 
-var : symbol "=" value
-
-comp : value "==" value
-
-opr: "(" value* ")"
-    | "(" opr ")"
-
-print: "printf" "(" value ")"
-
-symbol: SYMBOL
-
-func  : "func" symbol "(" value ")" "{" value* "}"
-
-call : symbol "(" value ")"
-
-if    : "if" "(" comp ")" "{" expr "}" ("else if" "(" comp ")" "{" expr "}")* ("else" "{" expr "}")*
 
 // Terminais
-SYMBOL  : /[-!+\/*@$%^&~<>?|\\\w=]+/
-STRING  : /"[^"\\]*(\\[^\n\t\r\f][^"\\]*)*"/
-INT     : /-?\d+/
-FLOAT   : /-?\d+\.\d+/
+SYMBOL.0  : /[-!+\/*@$%^&~<>?|\\\w]+/
+STRING.4  : /"[^"\\]*(\\[^\n\t\r\f][^"\\]*)*"/
+INT.1     : /-?\d+/
+FLOAT.2   : /-?\d+\.\d+/
+BOOLEAN.3 : /[TF]/
 
 %ignore /\s+/
 %ignore /\n/
