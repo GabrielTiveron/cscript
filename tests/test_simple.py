@@ -1,18 +1,19 @@
-from lispy import var, env, Symbol, parse, eval, global_env
+from cscript import var, env, Symbol, parse, eval, global_env
 
 run = lambda src, env=None: eval(parse(src), env)
 x, y, a, b, c, f, g, h, op = map(Symbol, 'x y a b c f g h op'.split())
 
 
-class TestLispGrammar:
+class TestCscriptGrammar:
     def test_numbers(self):
         assert parse('42') == 42
         assert parse('3.14') == 3.14
         assert parse('-3.14') == -3.14
+        assert parse('3 * 6') == [Symbol.MUL, 3, 6]
 
     def test_atomic(self):
-        assert parse('true') is True
-        assert parse('false') is False
+        assert parse('T') is True
+        assert parse('F') is False
         assert parse('x') == x
         assert parse('+') == Symbol('+')
 
@@ -48,8 +49,8 @@ class TestRuntime:
         assert run('42') == 42
 
     def test_eval_if_simple(self):
-        assert run('if(true) 42; 0;') == 42
-        assert run('if(false) 42; 0;)') == 0
+        assert run('if(T) 42; 0;') == 42
+        assert run('if(F) 42; 0;)') == 0
 
     def test_eval_if_nested(self):
         assert run('if (1 % 2 == 1) 40 + 2; 1 + 1;') == 42

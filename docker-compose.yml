@@ -1,0 +1,13 @@
+version: '3.2'
+
+services:
+  jupyter:
+    container_name: 'cscript'
+    image: 'tiverons/cscript'
+    build:
+      context: ./cscript
+      dockerfile: Dockerfile
+    volumes:
+      - "./:/cscript"
+    ports:
+      - "8888:8888"

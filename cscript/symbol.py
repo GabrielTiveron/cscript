@@ -1,9 +1,4 @@
 class Symbol:
-    """
-    Representa um símbolo Lisp.
-
-    Diferentemente de strings, símbolos com o mesmo valor possuem a mesma identidade.
-    """
 
     data : str
     CACHE = {}
@@ -32,23 +27,24 @@ class Symbol:
             return self._data == other._data
         return NotImplemented
 
-
-# Formas especiais
-Symbol.IF = Symbol('if')
-
-# Funções úteis
-Symbol.ADD = Symbol('+')
-Symbol.SUB = Symbol('-')
-Symbol.MUL = Symbol('*')
-Symbol.DIV = Symbol('/')
-Symbol.ASS = Symbol('=')
-Symbol.POW = Symbol('^')
-
-class _Var:
-    def __getattr__(self, attr):
-        return Symbol(attr)
-
-    def __repr__(self):
-        return 'var'
-
-var = _Var()
+#Definição de Simbolos
+Symbol.IF     = Symbol('if')
+Symbol.ELSIF  = Symbol('else if')
+Symbol.ADD    = Symbol('+')
+Symbol.SUB    = Symbol('-')
+Symbol.MUL    = Symbol('*')
+Symbol.DIV    = Symbol('/')
+Symbol.DEFINE = Symbol('=')
+Symbol.POW    = Symbol('^')
+Symbol.TRUE   = Symbol('T')
+Symbol.EQ     = Symbol('==')
+Symbol.GT     = Symbol('>')
+Symbol.LE     = Symbol('<=')
+Symbol.LT     = Symbol('<')
+Symbol.GE     = Symbol('>=')
+Symbol.TERN   = Symbol('?')
+Symbol.FUNC   = Symbol('func')
+Symbol.CALL   = Symbol('call')
+Symbol.FOR    = Symbol('for')
+Symbol.WHILE  = Symbol('while')
+Symbol.BLOCK  = Symbol('block')

@@ -1,62 +1,100 @@
 from lark import Lark, InlineTransformer
 from pathlib import Path
 
-from .runtime import Symbol
+from runtime import Symbol
 
 class CscriptTransformer(InlineTransformer):
 
     number = float
     name = str
-    
+
     def binop(self, left, op, right):
-        op = str(op)    
+        op = str(op)
         return (op, left, right)
+
+    def block(self, *block):
+        block = list(block)
+        return list(tuple((Symbol.BLOCK, block)))
+
+    def name(self, name):
+        return Symbol(name)
 
     def symbol(self, symbol):
         return Symbol(symbol)
-      
-    def cmd(self, *args):
-        return ('cmd', *args)
-    
+
+    def string(self, string):
+        return list(tuple((string[1:-1])))
+
     def assign(self, left, op):
-        return(Symbol.ASS, left, op)
+        return list(tuple((Symbol.DEFINE, left, op)))
 
     def binop(self, *args):
         return(args)
-    
+
+    def condition(self, *args):
+        return args
+
+    def func(self, *args):
+        name, *params, body = args
+        lis = []
+        for param in params:
+            lis.append(param)
+        return list(tuple((Symbol.FUNC, name, lis, body)))
+
+    def call(self, *params):
+        name, *param = params
+        return list(tuple((Symbol.CALL, name, list(param))))
+
+    def if_cond(self, condition, exp, *else_if):
+      lis = []
+      for arg in else_if:
+          lis.append(arg)
+      if lis != []:
+          return list(tuple((Symbol.IF, condition, exp, lis)))
+      else:
+          return list(tuple((Symbol.IF, condition, exp)))
+
     def sum(self, left, right):
-        print('@@@@@@@@@@@@@@@@@@@@', left, right)
         return list(tuple((Symbol.ADD, left, right)))
-    
+
     def sub(self, left, right):
-        return(Symbol.SUB, left, right)
-    
+        return list(tuple((Symbol.SUB, left, right)))
+
     def mul(self, left, right):
-        return(Symbol.MUL, left, right)
+        return list(tuple((Symbol.MUL, left, right)))
 
     def div(self, left, right):
-        return(Symbol.DIV, left, right)
+        return list(tuple((Symbol.DIV, left, right)))
 
     def pow(self, left, right):
-        return(Symbol.POW, left, right)
+        return list(tuple((Symbol.POW, left, right)))
 
     def bool(self, boolean):
-        return boolean == True
+        return Symbol(boolean) == Symbol.TRUE
 
-def parse(src: str):
-    """
-    Compila string de entrada e retorna a S-expression equivalente.
-    """
-    return parser.parse(src)
+    def lt(self, left, right):
+        return list(tuple((Symbol('<'), left, right)))
 
-def _make_grammar():
-    """
-    Retorna uma gramática do Lark inicializada.
-    """
+    def gt(self, left, right):
+        return list(tuple((Symbol('>'), left, right)))
 
-    path = Path(__file__).parent / 'grammar.lark'
-    with open(path) as fd:
-        grammar = Lark(fd, parser='lalr', transformer=CscriptTransformer())
-    return grammar
+    def eq(self, left, right):
+        return list(tuple((Symbol('=='), left, right)))
 
-parser = _make_grammar()
+    def lesseq(self, left, right):
+        return list(tuple((Symbol('<='), left, right)))
+
+    def goeq(self, left, right):
+        return list(tuple((Symbol('>='), left, right)))
+
+    def ternario(self, var, condition, if_true, if_false):
+      return list(tuple((Symbol.TERN, var, condition, if_true, if_false)))
+
+    def else_if(self, condition, exp):
+        return list(tuple((condition, exp)))
+
+    def for_loop(self, assign, condition, expr, block):
+        return list(tuple((Symbol.FOR, assign, condition, expr, block)))
+
+    def while_loop(self, condition, block):
+        return list(tuple((Symbol.WHILE, condition, block)))
