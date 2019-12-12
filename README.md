@@ -1,54 +1,82 @@
 # cscript
 
-Nossa linguagem é uma representação da linguagem C que aceita somente números nas variáveis.
+Nossa linguagem é uma representação limitada da linguagem C.
 
-# Operadores lógicos
+## Funções disponíveis
+
+### Operadores lógicos
 
 ```
 a + b
 a / b
 a % b
 a - b
+a ^ b
 ```
 
-# Operadores condicionais
+### Operadores condicionais
 
 ```
 a == b
+a != b
+a < b
+a > b
 a <= b
 a >= b
-a != b
 ```
 
-# Criação de funções
+### Operadores booleanos
 
 ```
-func function_name(param1, param2, ...) {
-  // your code
-  return 1; // you can return a value
+T para true
+F para false
+```
+
+### Operador ternário
+
+```
+condition ? true : false
+```
+
+### Criação de funções
+
+```
+func lambda(a, b, ...) {
+  code
 }
 ```
 
-# Chamada de funções
+### Chamada de funções
 
 ```
-function_name(param1, param2, ...);
+lambda(a, b, ...);
 ```
 
-# Criação de condicionais
+### Loops
 
 ```
-if (comparation) {
+a = 2;
+    for(b = 3; b <= 10; b = b + 1){
+        a = a + b
+    };
+```
+Também há a possibilidade de usar loops por meio do while
+
+```
+a = 1;
+    while(a < 10){
+        a = a + 1
+    }
+```
+
+### Criação de condicionais
+
+```
+if (condition) {
   // block of code
-} else if (comparation) {
+} else if (condition) {
   // block of code
 } else {
   // block of code
 }
-```
-
-# Debbuging
-
-```
-printf(param1, param2, ...)
 ```
