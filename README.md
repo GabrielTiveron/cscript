@@ -2,6 +2,11 @@
 
 Nossa linguagem é uma representação limitada da linguagem C.
 
+## Como executar
+Para executar a linguagem é necessário apenas o docker e o docker-compose, após instalar os dois é necessário utilizar o seguinte comando no terminal
+```
+sudo docker-compose up
+```
 ## Funções disponíveis
 
 ### Operadores lógicos
@@ -9,7 +14,7 @@ Nossa linguagem é uma representação limitada da linguagem C.
 ```
 a + b
 a / b
-a % b
+a * b
 a - b
 a ^ b
 ```
