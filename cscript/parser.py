@@ -8,6 +8,9 @@ class CscriptTransformer(InlineTransformer):
     number = float
     name = str
 
+    def start(self, *block):
+        return list(tuple((list(block))))
+
     def binop(self, left, op, right):
         op = str(op)
         return (op, left, right)
@@ -26,7 +29,7 @@ class CscriptTransformer(InlineTransformer):
         return list(tuple((string[1:-1])))
 
     def assign(self, left, op):
-        return list(tuple((Symbol.DEFINE, left, op)))
+        return list(tuple((Symbol.DEFINE, Symbol(left), op)))
 
     def binop(self, *args):
         return(args)

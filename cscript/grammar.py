@@ -2,69 +2,73 @@ from lark import Lark
 
 
 cscript = Lark(r"""
-?start : (block)+
+        ?start : (block)+
 
-?block : expr (";" expr)*
+        ?block : expr (";" expr)*
 
-?expr : assign
-      | term
-      | if
-      | func
-      | loop
-      | "(" expr ")"
+        ?expr : assign
+              | binop
+              | if
+              | func
+              | loop
+              | "(" expr ")"
 
-?term : value
-      | binop
-      | call
+        ?term : value
+              | call
 
-?func : "func" value "(" value ("," value)* ")""{"  block "}"
+        ?func : "func" value "(" value ("," value)* ")""{"  block "}"
 
-call : value "(" expr+ ("," expr+)*")"
+        call : value "(" expr+ ("," expr+)*")"
 
-?if : "if" "(" condition ")" "{" block "}" else_if* else? -> if_cond
-    | expr "=" condition "?" expr ":" expr -> ternario
+        ?if : "if" "(" condition ")" "{" block "}" else_if* else? -> if_cond
+            | expr "=" condition "?" expr ":" expr -> ternario
 
-?else_if : "else if" "(" condition ")" "{" block "}"
+        ?else_if : "else if" "(" condition ")" "{" block "}"
 
-?else : "else" "{" block "}"
+        ?else : "else" "{" block "}"
 
-?loop : "for" "(" assign ";" condition ";" expr ")" "{" block "}" -> for_loop
-      | "while" "(" condition ")" "{" block "}" -> while_loop
+        ?loop : "for" "(" assign ";" condition ";" expr ")" "{" block "}" -> for_loop
+              | "while" "(" condition ")" "{" block "}" -> while_loop
 
-?condition : expr "==" expr -> eq
-           | expr ">=" expr -> goeq
-           | expr "<=" expr -> lesseq
-           | expr ">" expr  -> gt
-           | expr "<" expr  -> lt
-           | expr
+        ?condition : expr "==" expr -> eq
+                   | expr ">=" expr -> goeq
+                   | expr "<=" expr -> lesseq
+                   | expr ">" expr  -> gt
+                   | expr "<" expr  -> lt
+                   | expr
 
-?binop : expr "+" expr -> sum
-       | expr "-" expr -> sub
-       | expr "*" expr -> mul
-       | expr "/" expr -> div
-       | expr "^" expr -> pow
+        ?binop : expr "+" mul -> sum
+               | expr "-" mul -> sub
+               | mul
 
-?assign : value "=" term
+        ?mul : expr "*" mul -> mul
+             | expr "/" mul -> div
+             | pow
 
-?value : STRING -> string
-       | INT -> number
-       | FLOAT -> number
-       | BOOLEAN -> bool
-       | NAME -> name
-       | SYMBOL -> symbol
+        ?pow : term "^" pow -> pow
+             | term
 
+        ?assign : NAME "=" binop
 
-
-// Terminais
-BOOLEAN : /[TF]/
-NAME    : /[a-zA-Z]\w*/
-SYMBOL  : /[-!+\/*@$%^&~<>?|\\\w]+/
-STRING  : /"[^"\\]*(\\[^\n\t\r\f][^"\\]*)*"/
-INT     : /-?\d+/
-FLOAT  : /-?\d+\.\d+/
+        ?value : STRING -> string
+               | INT -> number
+               | FLOAT -> number
+               | BOOLEAN -> bool
+               | NAME -> name
+               | SYMBOL -> symbol
 
 
-%ignore /\s+/
-%ignore /\n/
-%ignore /\/\/[^\n]*/
+
+        // Terminais
+        BOOLEAN : /[TF]/
+        NAME    : /[a-zA-Z]\w*/
+        SYMBOL  : /[-!+\/*@$%^&~<>?|\\\w]+/
+        STRING  : /"[^"\\]*(\\[^\n\t\r\f][^"\\]*)*"/
+        INT     : /-?\d+/
+        FLOAT  : /-?\d+\.\d+/
+
+
+        %ignore /\s+/
+        %ignore /\n/
+        %ignore /\/\/[^\n]*/
 """)

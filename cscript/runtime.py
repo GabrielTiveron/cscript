@@ -22,12 +22,11 @@ def eval(x, env):
 
 
     if x == None:
-      return x
+          return x
     elif isinstance(x, list):
-      if isinstance(x[0], list):
-        x = x[0]
+          if isinstance(x[0], list):
+            x = x[0]
 
-    print('XX', x)
     head, *args = x
 
     if head == Symbol.ADD:
@@ -40,7 +39,9 @@ def eval(x, env):
 
     elif head == Symbol.MUL:
         x,y = args
-        return eval(x, env) * eval(y, env)
+        x = eval(x, env)
+        y = eval(y, env)
+        return x * y
 
     elif head == Symbol.DIV:
         x,y = args
@@ -53,30 +54,29 @@ def eval(x, env):
     elif head == Symbol.BLOCK:
         if isinstance(args, list):
             args = args[0]
-        print('ARG: ', args)
         for exp in args:
-          value = eval(exp, env)
+              value = eval(exp, env)
         return value
 
     elif head == Symbol.IF:
         (_, test, then, *alt) = x
         if alt != []:
-          exp = (then if eval(test, env) else None)
-          if exp != None:
-            value = eval(exp, env)
-            return value
-          else:
-            for i in range(len(alt)):
-              exp = (then if eval(alt[i], env) else None)
-              if exp != None:
+            exp = (then if eval(test, env) else None)
+            if exp != None:
                 value = eval(exp, env)
                 return value
+            else:
+                for i in range(len(alt)):
+                    exp = (then if eval(alt[i], env) else None)
+                    if exp != None:
+                        value = eval(exp, env)
+                        return value
 
         else:
-          exp = (then if eval(test, env) else None)
-          if exp != None:
-            value = eval(exp, env)
-            return value
+            exp = (then if eval(test, env) else None)
+            if exp != None:
+                value = eval(exp, env)
+                return value
 
     elif head == Symbol.EQ:
         x, y = args
@@ -111,30 +111,33 @@ def eval(x, env):
 
     elif head == Symbol.FOR:
         assign, condition, expr, block = args
-        print('ass', assign[1], 'condition', condition, 'expr', expr)
-        eval(assign, env)
-        d = env.new_child()
-        aux = ChainMap(d, env)
-        while(eval(condition, d)):
-            value = eval(block, d)
-            value = eval(expr, d)
+        d = {}
+        eval(assign, d)
+        value = 0
+        while(eval(condition, ChainMap(env, d))):
+            value = eval(block, ChainMap(env, d))
+            eval(expr, ChainMap(env, d))
         env = ChainMap(env, d)
-        return value
+    
+    elif head == Symbol.WHILE:
+        condition, block = args
+        while(eval(condition, env)):
+            value = eval(block, env)
 
     elif head == Symbol.FUNC:
         name, *arg, block = args
-        d = env.new_child()
+        d = ChainMap()
         if not isinstance(arg, list):
             arg = [arg]
         def fn(*x):
-          x = list(x) 
-          if isinstance(x, list): 
-            x = x[0] 
-          for i in range(len(arg[0])): 
-            d[Symbol(arg[0][i])] = eval(x[i], ChainMap(env, d))
-          return eval(block, ChainMap(env, d))
-        env = ChainMap(env, d)
+            x = list(x) 
+            if isinstance(x, list): 
+                x = x[0] 
+            for i in range(len(arg[0])):
+                d[Symbol(arg[0][i])] = eval(x[i], ChainMap(d))
+            return eval(block, ChainMap(d))
         env[Symbol(name)] = fn
+        d[Symbol(name)] = fn
         
 
     elif head == Symbol.CALL:
@@ -142,4 +145,4 @@ def eval(x, env):
         return env[Symbol(name)](*arg)
 
     else:
-      raise TypeError
+        raise TypeError
