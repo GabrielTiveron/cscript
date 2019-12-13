@@ -27,7 +27,7 @@ class CscriptTransformer(InlineTransformer):
         return Symbol(symbol)
 
     def string(self, string):
-        return list(tuple((string[1:-1])))
+        return string[1:-1]
 
     def assign(self, left, op):
         return list(tuple((Symbol.DEFINE, Symbol(left), op)))
