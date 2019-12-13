@@ -35,6 +35,7 @@ cscript = Lark(r"""
                    | expr "<=" expr -> lesseq
                    | expr ">" expr  -> gt
                    | expr "<" expr  -> lt
+                   | expr "!=" expr -> neq
                    | expr
 
         ?binop : expr "+" mul -> sum

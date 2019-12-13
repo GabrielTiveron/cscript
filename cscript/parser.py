@@ -50,13 +50,13 @@ class CscriptTransformer(InlineTransformer):
         return list(tuple((Symbol.CALL, name, list(param))))
 
     def if_cond(self, condition, exp, *else_if):
-      lis = []
-      for arg in else_if:
-          lis.append(arg)
-      if lis != []:
-          return list(tuple((Symbol.IF, condition, exp, lis)))
-      else:
-          return list(tuple((Symbol.IF, condition, exp)))
+        lis = []
+        for arg in else_if:
+            lis.append(arg)
+        if lis != []:
+            return list(tuple((Symbol.IF, condition, exp, lis)))
+        else:
+            return list(tuple((Symbol.IF, condition, exp)))
 
     def sum(self, left, right):
         return list(tuple((Symbol.ADD, left, right)))
@@ -77,22 +77,25 @@ class CscriptTransformer(InlineTransformer):
         return Symbol(boolean) == Symbol.TRUE
 
     def lt(self, left, right):
-        return list(tuple((Symbol('<'), left, right)))
+        return list(tuple((Symbol.LT, left, right)))
 
     def gt(self, left, right):
-        return list(tuple((Symbol('>'), left, right)))
+        return list(tuple((Symbol.GT, left, right)))
 
     def eq(self, left, right):
-        return list(tuple((Symbol('=='), left, right)))
+        return list(tuple((Symbol.EQ, left, right)))
 
     def lesseq(self, left, right):
-        return list(tuple((Symbol('<='), left, right)))
+        return list(tuple((Symbol.LE, left, right)))
 
     def goeq(self, left, right):
-        return list(tuple((Symbol('>='), left, right)))
+        return list(tuple((Symbol.GE, left, right)))
+    
+    def neq(self, left, right):
+        return list(tuple((Symbol.NEQ, left, right)))
 
     def ternario(self, var, condition, if_true, if_false):
-      return list(tuple((Symbol.TERN, var, condition, if_true, if_false)))
+        return list(tuple((Symbol.TERN, var, condition, if_true, if_false)))
 
     def else_if(self, condition, exp):
         return list(tuple((condition, exp)))

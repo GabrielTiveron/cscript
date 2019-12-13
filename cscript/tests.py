@@ -44,6 +44,7 @@ class TestCscriptGrammar:
         value_Le = parse('if (4 <= 5){2 + 5}')
         value_Lt = parse('if (3 < 5){3 * 1}')
         value_Ge = parse('if (3 >= 4){2 ^ 3}')
+        value_Ne = parse('if (3 != 1){1 + 2} else { 1 + 1 }')
         value_ternario = parse('asd = 3 > 0 ? 1 : 2')
 
         if_if = CscriptTransformer().transform(value_if)
@@ -52,6 +53,7 @@ class TestCscriptGrammar:
         if_Le = CscriptTransformer().transform(value_Le)
         if_Lt = CscriptTransformer().transform(value_Lt)
         if_Ge = CscriptTransformer().transform(value_Ge)
+        if_Ne = CscriptTransformer().transform(value_Ne)
         if_ternario = CscriptTransformer().transform(value_ternario)
         env = {Symbol('b'): 2}
         print_ = parse('b = b == 2 ? 6 : 0')
@@ -64,6 +66,7 @@ class TestCscriptGrammar:
         assert if_Le == [Symbol.IF, [Symbol.LE, 4.0, 5.0], [Symbol.ADD, 2, 5]]
         assert if_Lt == [Symbol.IF, [Symbol.LT, 3.0, 5.0], [Symbol.MUL, 3, 1]]
         assert if_Ge == [Symbol.IF, [Symbol.GE, 3.0, 4.0], [Symbol.POW, 2, 3]]
+        assert if_Ne == [Symbol.IF, [Symbol.NEQ, 3.0, 1.0], [Symbol.ADD, 1, 2], [[Symbol.ADD, 1, 1]]]
         assert if_ternario == [Symbol.TERN, Symbol('asd'), [Symbol.GT, 3, 0], 1, 2]
         assert env[Symbol('b')] == 6
         assert eval(if_if, {}) == 4
@@ -71,6 +74,7 @@ class TestCscriptGrammar:
         assert eval(if_Gt, {}) == 8
         assert eval(if_Le, {}) == 7
         assert eval(if_Lt, {}) == 3
+        assert eval(if_Ne, {}) == 3
         assert eval(if_Ge, {}) is None
         env = {'asd': 2}
         assert eval(if_ternario, env) == None

@@ -81,6 +81,10 @@ def eval(x, env):
     elif head == Symbol.EQ:
         x, y = args
         return eval(x, env) == eval(y, env)
+    
+    elif head == Symbol.NEQ:
+        x,y = args
+        return eval(x, env) != eval(y, env)
 
     elif head == Symbol.LE:
         x, y = args
