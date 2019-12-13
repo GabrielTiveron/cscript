@@ -2,6 +2,7 @@ from lark import Lark, InlineTransformer
 from pathlib import Path
 
 from runtime import Symbol
+from grammar import cscript
 
 class CscriptTransformer(InlineTransformer):
 
@@ -101,3 +102,12 @@ class CscriptTransformer(InlineTransformer):
 
     def while_loop(self, condition, block):
         return list(tuple((Symbol.WHILE, condition, block)))
+
+def parse(src: str):
+    """
+    Compila string de entrada e retorna a S-expression equivalente.
+    """
+    return parse(src)
+
+
+parse = cscript.parse

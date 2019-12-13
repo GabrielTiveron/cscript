@@ -1,4 +1,8 @@
-from cscript import var, env, Symbol, parse, eval, global_env
+#from .parser import var, env, Symbol, parse, eval, global_env
+from parser import CscriptTransformer
+from grammar import cscript
+from runtime import eval
+from symbol import Symbol    
 
 run = lambda src, env=None: eval(parse(src), env)
 x, y, a, b, c, f, g, h, op = map(Symbol, 'x y a b c f g h op'.split())
